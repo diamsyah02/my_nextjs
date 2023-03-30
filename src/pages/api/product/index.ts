@@ -15,11 +15,11 @@ export default async function handler(
 ) {
     if (verifyAuthenticationX(req)) {
         const { method } = req
-        if (method == 'get') result = await getData(req)
-        if (method == 'post') result = await postData(req)
-        if (method == 'put') result = await putData(req)
-        if (method == 'delete') result = await deleteData(req)
-        return res.status(result.statusCode).send(result)
+        if (method == 'GET') result = await getData(req)
+        if (method == 'POST') result = await postData(req)
+        if (method == 'PUT') result = await putData(req)
+        if (method == 'DELETE') result = await deleteData(req)
+        return await res.status(result.statusCode).send(result)
     }
     return res.status(result.statusCode).send(result)
 }

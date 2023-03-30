@@ -1,12 +1,12 @@
 import Head from "next/head";
 import Navbar from "@/components/Navbar";
 import { WebResponseEntity } from "@/Entities/WebResponse";
+import { NextRequest, NextResponse } from "next/server";
+import { fetchWrapper } from "@/Helpers/fetchWrapper";
 
-export async function getServerSideProps() {
-    const result = await (
-        await fetch(`http://localhost:3000/api/product`)
-    ).json();
-    if (result.statusCode !== 200) {
+export const getServerSideProps = async ({req, res} : {req: NextRequest, res: NextResponse}) => {
+    const data: WebResponseEntity = await fetchWrapper.get('/product', req.cookies.nextjs_asyncawait)
+    if (data.statusCode !== 200) {
         return {
             redirect: {
                 permanent: true,
@@ -15,11 +15,11 @@ export async function getServerSideProps() {
         };
     }
     return {
-        props: { data: result },
+        props: { data },
     };
 }
 
-export default function Product({ data }: { data: WebResponseEntity }) {
+export default function Product({ data } : { data: WebResponseEntity }) {
     return (
         <>
             <Head>

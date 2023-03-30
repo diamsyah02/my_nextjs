@@ -6,16 +6,16 @@ import { clearCookieX, getCookieX, setCookieX } from "@/Helpers/authentication";
 
 let result: WebResponseEntity;
 
-export default function handler(
+export default async function handler(
     req: NextApiRequest,
     res: NextApiResponse
 ) {
-    const { query, body } = req
+    const { query } = req
     if(decryptX(query.__) === 'login') {
-        result = login(req)
+        result = await login(req)
         setCookieX(res, result.data)
     }
-    if(decryptX(query.__) === 'register') result = register(req)
+    if(decryptX(query.__) === 'register') result = await register(req)
     if(decryptX(query.__) === 'logout') {
         if (getCookieX(req)) result = { statusCode: 401, message: `You are already not login`, data: [] }
         clearCookieX(res)

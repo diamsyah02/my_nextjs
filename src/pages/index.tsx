@@ -14,7 +14,7 @@ export default function Home() {
       username: e.target.username.value,
       password: e.target.password.value,
     };
-    let res = await fetchWrapper.post(`/authentication?__=${encryptX("login")}`, body);
+    let res = await fetchWrapper.post(`/auth?__=${encryptX("login")}`, body);
     if (res.statusCode == 200 || res.statusCode == 201) router.replace('/product');
     else alert(res.message);
   }

@@ -15,7 +15,7 @@ export default function Register() {
             username: e.target.username.value,
             password: e.target.password.value,
         }
-        let res = await fetchWrapper.post(`/auth?__=${encryptX('register')}`, body)
+        let res = await fetchWrapper.auth(`/auth?__=${encryptX('register')}`, body)
         if(res.statusCode == 200 || res.statusCode == 201) router.back()
         else alert(res.message)
     }

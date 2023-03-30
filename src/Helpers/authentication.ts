@@ -1,10 +1,11 @@
 import { serialize } from "cookie"
 import { NextApiRequest, NextApiResponse } from "next";
 import { sign, verify } from 'jsonwebtoken'
-import { decryptX, encryptX } from "@/Helpers/encrypt_decrypt";
+
+const KEY_COOKIE = 'nextjs_asyncawait'
 
 export const setCookieX = (res: NextApiResponse, token: string) => {
-    const serialised = serialize(encryptX(process.env.KEY_COOKIE || 'nextjs_asyncawait'), token, {
+    const serialised = serialize(KEY_COOKIE, token, {
         httpOnly: true,
         secure: true,
         sameSite: "strict",
@@ -16,7 +17,7 @@ export const setCookieX = (res: NextApiResponse, token: string) => {
 
 export const getCookieX = (req: NextApiRequest) => {
     const { cookies } = req
-    return cookies[decryptX(process.env.KEY_COOKIE || 'nextjs_asyncawait')]
+    return cookies[KEY_COOKIE]
 }
 
 export const clearCookieX = (res: NextApiResponse) => {
@@ -36,20 +37,20 @@ export const setTokenX = (username: string) => {
             exp: Math.floor(Date.now() / 1000) + 60 * 60 * 24 * 30, // 30 days
             username: username,
         },
-        process.env.NEXTAUTH_SECRET || '',
+        process.env.NEXTAUTH_SECRET || 'IMHJLgUO6yK0Nsi+7Iq3b5SGxtd0snIl9XplnZ6LLmk=',
         {
-            algorithm: 'RS512'
+            algorithm: 'HS256'
         }
     );
     return token
 }
 
 export const verifyAuthenticationX = (req: NextApiRequest) => {
-    const { cookies } = req
-    const jwt = cookies[decryptX(process.env.KEY_COOKIE || 'nextjs_asyncawait')]
-    if (jwt) {
-        const decode = verify(jwt, process.env.NEXTAUTH_SECRET || 'IMHJLgUO6yK0Nsi+7Iq3b5SGxtd0snIl9XplnZ6LLmk=')
-        if (decode) return true
+    const { headers } = req
+    let jwt = headers.authorization?.split(' ')
+    if (jwt?.length! > 0) {
+        const decode = verify(jwt[1], process.env.NEXTAUTH_SECRET || 'IMHJLgUO6yK0Nsi+7Iq3b5SGxtd0snIl9XplnZ6LLmk=')
+        if (Object.keys(decode).length !== 0) return true
         return false
     }
     return false
