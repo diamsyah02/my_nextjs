@@ -1,2 +1,2 @@
 # my_nextjs
- Belajar Next JS 13
+ Belajar Next JS 13 dengan auth JWT & Cookie
