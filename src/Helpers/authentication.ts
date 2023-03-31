@@ -1,8 +1,7 @@
 import { serialize } from "cookie"
 import { NextApiRequest, NextApiResponse } from "next";
 import { sign, verify } from 'jsonwebtoken'
-
-const KEY_COOKIE = 'nextjs_asyncawait'
+import { KEY_COOKIE } from "./constant";
 
 export const setCookieX = (res: NextApiResponse, token: string) => {
     const serialised = serialize(KEY_COOKIE, token, {
@@ -21,7 +20,7 @@ export const getCookieX = (req: NextApiRequest) => {
 }
 
 export const clearCookieX = (res: NextApiResponse) => {
-    const serialised = serialize(process.env.KEY_COOKIE || 'nextjs_asyncawait', '', {
+    const serialised = serialize(KEY_COOKIE, '', {
         httpOnly: true,
         secure: true,
         sameSite: "strict",
