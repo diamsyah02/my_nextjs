@@ -17,7 +17,7 @@ export default async function handler(
     }
     if(decryptX(query.__) === 'register') result = await register(req)
     if(decryptX(query.__) === 'logout') {
-        if (getCookieX(req)) result = { statusCode: 401, message: `You are already not login`, data: [] }
+        if (!getCookieX(req)) result = { statusCode: 401, message: `You are already not login`, data: [] }
         clearCookieX(res)
         result = {statusCode: 200, message: `Successfuly logout!`, data: []}
     }
